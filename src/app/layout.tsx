@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./reset.css";
 import "./globals.css";
 import ShareButton from "./components/ShareButton";
+import Link from "next/link";
 
 export const metadata: Metadata = {
 	title: "디주릿",
@@ -27,7 +28,9 @@ export default function RootLayout({
 					<header className="header">
 						<div className="header__inner">
 							<h1 className="header__title">
-								<a href="/">DIDYOUREAD</a>
+								<Link href="/">
+									DIDYOUREAD
+								</Link>
 							</h1>
 
 							<ShareButton />
