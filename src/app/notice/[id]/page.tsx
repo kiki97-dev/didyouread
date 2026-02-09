@@ -114,7 +114,7 @@ export default async function NoticePage({
 								<p style={{ marginBottom: "20px" }}>
 									이번 개정은 보안 시스템 강화와 접속 로그 보관 주기 연장(6개월 →
 									1년)을 주요 내용으로 하고 있습니다. 변경된 약관의 전체 내용은
-									고객센터 메뉴의 '약관 전체보기'를 통해 확인하실 수 있습니다.
+									고객센터 메뉴의 &apos;약관 전체보기&lsquo;를 통해 확인하실 수 있습니다.
 								</p>
 
 								<p style={{ marginBottom: "20px" }}>
