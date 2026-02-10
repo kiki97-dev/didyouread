@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import QuizHeader from "../_components/QuizHeader";
 
 export default function QuizPage() {
 	const router = useRouter();
@@ -36,10 +37,10 @@ export default function QuizPage() {
 
 	const quizData = allQuizData[id] || allQuizData["1"]; // 데이터 없을 시 기본값 1번
 
-	const handleOptionClick = () => {
+	const handleOptionClick = useCallback(() => {
 		// 마지막 문제가 아닐 경우 다음 문제로
 		if (currentStep < quizData.length - 1) {
-			setCurrentStep(currentStep + 1);
+			setCurrentStep((prev) => prev + 1);
 			return;
 		}
 
@@ -54,7 +55,7 @@ export default function QuizPage() {
 			alert("모든 테스트가 완료되었습니다!");
 			router.push("/result");
 		}
-	};
+	}, [currentStep, id, quizData.length, router]);
 
 	return (
 		<div
@@ -65,6 +66,13 @@ export default function QuizPage() {
 				fontFamily: "sans-serif",
 			}}
 		>
+			<QuizHeader
+				currentStep={currentStep}
+				totalSteps={quizData.length}
+				resetKey={currentStep}
+				onTimeout={handleOptionClick}
+			/>
+
 			{/* 문항 표시 스타일링 */}
 			<p
 				style={{
