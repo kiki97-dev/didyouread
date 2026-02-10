@@ -1,18 +1,50 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
-// useSearchParams를 사용하는 부분을 별도 컴포넌트로 분리
+const SCORE_KEY = "quiz_score";
+
+type Score = {
+  correct: number;
+  total: number;
+  updatedAt?: number;
+};
+
 function ResultContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // 퀴즈 페이지에서 넘겨준 정답 개수 (기본값 0)
-  const score = Number(searchParams.get("score") || "0");
+  // ✅ localStorage 점수
+  const [scoreData, setScoreData] = useState<Score>({ correct: 0, total: 0 });
 
-  // 점수별 데이터 매핑
+  useEffect(() => {
+    // (fallback) 기존 query score가 있으면 임시로 읽을 수도 있음
+    // 하지만 최종은 localStorage를 기준으로!
+    const queryScore = Number(searchParams.get("score") || "0");
+
+    try {
+      const raw = localStorage.getItem(SCORE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setScoreData({
+          correct: Number(parsed.correct) || 0,
+          total: Number(parsed.total) || 0,
+          updatedAt: parsed.updatedAt,
+        });
+        return;
+      }
+    } catch {}
+
+    // localStorage 값이 없으면 queryScore라도 보여주기(원치 않으면 제거 가능)
+    setScoreData({ correct: queryScore, total: queryScore ? queryScore : 0 });
+  }, [searchParams]);
+
+  const correct = scoreData.correct ?? 0;
+  const total = scoreData.total ?? 0;
+
+  // ✅ 점수별 데이터 매핑 (기존 0~2 기준 + 누적 대응)
   const resultData = {
     2: {
       level: "res_level_3",
@@ -34,11 +66,19 @@ function ResultContent() {
     },
   };
 
-  const currentResult = resultData[score as keyof typeof resultData] || resultData[0];
+  // ✅ 누적 점수일 때: 2 이상이면 최상급으로 고정(최소 변경)
+  const key = correct >= 2 ? 2 : correct >= 1 ? 1 : 0;
+  const currentResult = resultData[key as keyof typeof resultData];
+
+  const handleRetry = () => {
+    // ✅ 점수 초기화
+    localStorage.removeItem(SCORE_KEY);
+    // 필요하면 다른 누적 데이터도 여기서 같이 제거
+    router.push("/");
+  };
 
   return (
     <div className="main01__inner main-common-inner" style={{ textAlign: "center" }}>
-      {/* 캐릭터 이미지 */}
       <Image
         src={`/images/${currentResult.level}.png`}
         alt={currentResult.subTitle}
@@ -47,24 +87,31 @@ function ResultContent() {
         priority
       />
 
-      {/* 결과 타이틀 */}
       <h1>
-        정답 : {currentResult.title} <br />
+        정답 : {correct}개 <br />
         {currentResult.subTitle}
       </h1>
 
-      {/* 결과 설명 문구: whiteSpace 추가로 줄바꿈 적용 */}
       <p style={{ whiteSpace: "pre-line" }}>{currentResult.desc}</p>
 
-      {/* 다시 하기 버튼 */}
-      <Link href="/" className="common-btn" style={{ display: "inline-block", textDecoration: "none" }}>
+      {/* ✅ 다시 하기: 버튼으로 처리(초기화 로직 포함) */}
+      <button
+        type="button"
+        onClick={handleRetry}
+        className="common-btn"
+        style={{
+          display: "inline-block",
+          textDecoration: "none",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
         다시 테스트하기
-      </Link>
+      </button>
     </div>
   );
 }
 
-// 빌드 에러 방지를 위한 Suspense 래핑
 export default function ResultPage() {
   return (
     <section className="main01">
