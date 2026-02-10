@@ -12,34 +12,46 @@ import QuizHeader from "../_components/QuizHeader";
 import OptionList from "../_components/OptionList";
 import NextButton from "../_components/NextButton";
 
+/* 
+이 페이지가 하는 일 한 줄 요약
+1. URL의 id(퀴즈 1/2)를 보고 해당 퀴즈 목록을 불러온다
+2. 보기(정답/오답)를 한 번 섞어 고정한다
+3. 사용자가 선택하고 “다음”을 누르거나, 30초가 지나면 자동 제출한다
+4. 정답 여부는 localStorage에 누적 점수로 기록한다
+5. 마지막 문제면 다음 공지/결과 페이지로 이동한다
+*/
 export default function QuizPage() {
 	const router = useRouter();
 	const params = useParams();
 	const id = (params?.id as string) ?? "1";
 
+	//점수 기록 훅
 	const { recordAnswer } = useQuizScore();
 
+	//현재 진행 상태(문제, 사용자가 선택한 보기인덱스)
 	const [currentStep, setCurrentStep] = useState(0);
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
+	//id에 맞는 퀴즈 분기처리
 	const rawQuizData = allQuizData[id] || allQuizData["1"];
-	const total = rawQuizData.length;
+	const total = rawQuizData.length; //총문항수
 
 	// ✅ 옵션 섞인 결과를 “id 기준으로 한 번” 확정
 	const builtQuizData = useMemo(() => buildQuizData(rawQuizData), [id]); // rawQuizData는 id로 결정됨
 	const currentQuiz = builtQuizData[currentStep];
 
-	// ✅ id 변경 시 step만 리셋(점수는 누적이므로 건드리지 않음)
+	// ✅ id 변경 시 step만 리셋
 	useEffect(() => {
 		setCurrentStep(0);
 		setSelectedIndex(null);
 	}, [id]);
 
-	// ✅ step 변경 시 선택 리셋
+	// ✅ step 변경 시 사용자 정답 선택값 초기화
 	useEffect(() => {
 		setSelectedIndex(null);
 	}, [currentStep]);
 
+	//제출로직
 	const submitAndGoNext = (picked: number | null) => {
 		if (!currentQuiz) return;
 
@@ -88,8 +100,8 @@ export default function QuizPage() {
 				fontFamily: "sans-serif",
 			}}
 		>
+			{/* Q번호/총문항/타이머 표시 */}
 			<QuizHeader step={currentStep} total={total} timeLeft={timeLeft} />
-
 			<h2
 				style={{
 					fontSize: "1.3rem",
@@ -103,13 +115,12 @@ export default function QuizPage() {
 			>
 				{currentQuiz.question}
 			</h2>
-
+			{/* 보기 리스트 + 선택 스타일 처리 */}
 			<OptionList
 				options={currentQuiz.options}
 				selectedIndex={selectedIndex}
 				onSelect={setSelectedIndex}
 			/>
-
 			<NextButton
 				isLast={currentStep === total - 1}
 				onClick={() => submitAndGoNext(selectedIndex)}
