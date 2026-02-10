@@ -1,25 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 
-import { allQuizData } from "../_data/quizData";
-import { buildQuizData } from "../_utils/buildQuiz";
-import { useQuizScore } from "../_hooks/useQuizScore";
-import { useCountdown } from "../_hooks/useCountdown";
-
-import QuizHeader from "../_components/QuizHeader";
-import OptionList from "../_components/OptionList";
-import NextButton from "../_components/NextButton";
-
-/* 
-이 페이지가 하는 일 한 줄 요약
-1. URL의 id(퀴즈 1/2)를 보고 해당 퀴즈 목록을 불러온다
-2. 보기(정답/오답)를 한 번 섞어 고정한다
-3. 사용자가 선택하고 “다음”을 누르거나, 30초가 지나면 자동 제출한다
-4. 정답 여부는 localStorage에 누적 점수로 기록한다
-5. 마지막 문제면 다음 공지/결과 페이지로 이동한다
-*/
 export default function QuizPage() {
 	const router = useRouter();
 	const params = useParams();
@@ -30,39 +13,38 @@ export default function QuizPage() {
 
 	//현재 진행 상태(문제, 사용자가 선택한 보기인덱스)
 	const [currentStep, setCurrentStep] = useState(0);
-	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-	//id에 맞는 퀴즈 분기처리
-	const rawQuizData = allQuizData[id] || allQuizData["1"];
-	const total = rawQuizData.length; //총문항수
+	// 공지사항 내용에 맞춘 퀴즈 데이터 (id별 분기)
+	const allQuizData: Record<string, { question: string; options: string[] }[]> = {
+		"1": [
+			{
+				question: "개정된 이용약관의 효력 발생일은 언제인가요?",
+				options: ["2026년 3월 1일", "2026년 3월 15일", "2026년 4월 1일", "2026년 5월 1일"],
+			},
+			{
+				question: "보안 강화를 위해 변경된 접속 로그 보관 주기는?",
+				options: ["3개월", "6개월", "1년", "무제한"],
+			},
+			{
+				question: "약관 개정에 동의하지 않을 경우 사용자의 선택은?",
+				options: ["고객센터 전화", "이메일 문의", "회원 탈퇴", "유료 결제"],
+			},
+		],
+		"2": [
+			{
+				question: "공지사항 2번 관련 퀴즈 질문을 여기에?",
+				options: ["정답 선택지", "오답 1", "오답 2", "오답 3"],
+			},
+			// ... 퀴즈 2번 문항들 추가
+		],
+	};
 
-	// ✅ 옵션 섞인 결과를 “id 기준으로 한 번” 확정
-	const builtQuizData = useMemo(() => buildQuizData(rawQuizData), [id]); // rawQuizData는 id로 결정됨
-	const currentQuiz = builtQuizData[currentStep];
+	const quizData = allQuizData[id] || allQuizData["1"]; // 데이터 없을 시 기본값 1번
 
-	// ✅ id 변경 시 step만 리셋
-	useEffect(() => {
-		setCurrentStep(0);
-		setSelectedIndex(null);
-	}, [id]);
-
-	// ✅ step 변경 시 사용자 정답 선택값 초기화
-	useEffect(() => {
-		setSelectedIndex(null);
-	}, [currentStep]);
-
-	//제출로직
-	const submitAndGoNext = (picked: number | null) => {
-		if (!currentQuiz) return;
-
-		const isCorrect = picked !== null && picked === currentQuiz.correctIndex;
-		recordAnswer(isCorrect);
-
-		const nextStep = currentStep + 1;
-
-		// 다음 문항
-		if (nextStep < total) {
-			setCurrentStep(nextStep);
+	const handleOptionClick = () => {
+		// 마지막 문제가 아닐 경우 다음 문제로
+		if (currentStep < quizData.length - 1) {
+			setCurrentStep(currentStep + 1);
 			return;
 		}
 
@@ -77,20 +59,6 @@ export default function QuizPage() {
 		}
 	};
 
-	// ✅ 30초 카운트다운 (0초면 자동 제출)
-	const { timeLeft, reset: resetCountdown } = useCountdown({
-		initialSeconds: 30,
-		isActive: !!currentQuiz,
-		onExpire: () => submitAndGoNext(selectedIndex),
-	});
-
-	// step/id 바뀔 때 타이머 리셋
-	useEffect(() => {
-		resetCountdown(30);
-	}, [currentStep, id, resetCountdown]);
-
-	if (!currentQuiz) return null;
-
 	return (
 		<div
 			style={{
@@ -100,8 +68,20 @@ export default function QuizPage() {
 				fontFamily: "sans-serif",
 			}}
 		>
-			{/* Q번호/총문항/타이머 표시 */}
-			<QuizHeader step={currentStep} total={total} timeLeft={timeLeft} />
+			{/* 문항 표시 스타일링 */}
+			<p
+				style={{
+					fontFamily: "Paperlogy",
+					color: "#54759a",
+					fontWeight: "bold",
+					fontSize: "1.1rem",
+					marginBottom: "6px",
+				}}
+			>
+				Q{currentStep + 1}.
+			</p>
+
+			{/* 질문 내용 스타일링 */}
 			<h2
 				style={{
 					fontSize: "1.3rem",
