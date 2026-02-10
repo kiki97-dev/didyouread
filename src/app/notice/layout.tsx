@@ -6,7 +6,6 @@ import ProgressBar from "./_components/ProgressBar";
 import QuizModal from "./_components/QuizModal";
 
 export default function NoticeLayout({ children }: { children: React.ReactNode }) {
-	const [scrollProgress, setScrollProgress] = useState(0);
 	const [showQuiz, setShowQuiz] = useState(false);
 
 	// ✅ A버전: 사용자 입력(스크롤 의도) 1회 이상 감지
@@ -17,28 +16,6 @@ export default function NoticeLayout({ children }: { children: React.ReactNode }
 
 	const bottomRef = useRef<HTMLDivElement | null>(null);
 	const dwellTimerRef = useRef<number | null>(null);
-
-	// ✅ (선택) ProgressBar 업데이트: 기존 rAF 유지
-	useEffect(() => {
-		let raf = 0;
-
-		const update = () => {
-			const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-			const scrollTop = window.scrollY;
-
-			if (scrollHeight > 0) {
-				setScrollProgress((scrollTop / scrollHeight) * 100);
-			} else {
-				// 스크롤 불가능한 짧은 글이면 100으로 두거나 0으로 둘지 선택 가능
-				setScrollProgress(100);
-			}
-
-			raf = requestAnimationFrame(update);
-		};
-
-		raf = requestAnimationFrame(update);
-		return () => cancelAnimationFrame(raf);
-	}, []);
 
 	// ✅ 사용자 입력(스크롤 의도) 1회 감지
 	useEffect(() => {
@@ -113,7 +90,7 @@ export default function NoticeLayout({ children }: { children: React.ReactNode }
 
 	return (
 		<section style={{ position: "relative", minHeight: "100vh" }}>
-			<ProgressBar progress={scrollProgress} />
+			<ProgressBar />
 
 			<div
 				style={{
