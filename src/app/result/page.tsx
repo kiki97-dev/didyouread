@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const SCORE_KEY = "quiz_score";
 
@@ -12,18 +12,13 @@ type Score = {
   updatedAt?: number;
 };
 
-function ResultContent() {
-  const searchParams = useSearchParams();
+export default function ResultPage() {
   const router = useRouter();
 
-  // ✅ localStorage 점수
+  const [loaded, setLoaded] = useState(false);
   const [scoreData, setScoreData] = useState<Score>({ correct: 0, total: 0 });
 
   useEffect(() => {
-    // (fallback) 기존 query score가 있으면 임시로 읽을 수도 있음
-    // 하지만 최종은 localStorage를 기준으로!
-    const queryScore = Number(searchParams.get("score") || "0");
-
     try {
       const raw = localStorage.getItem(SCORE_KEY);
       if (raw) {
@@ -33,18 +28,17 @@ function ResultContent() {
           total: Number(parsed.total) || 0,
           updatedAt: parsed.updatedAt,
         });
-        return;
       }
-    } catch {}
-
-    // localStorage 값이 없으면 queryScore라도 보여주기(원치 않으면 제거 가능)
-    setScoreData({ correct: queryScore, total: queryScore ? queryScore : 0 });
-  }, [searchParams]);
+    } catch {
+      // 파싱 실패 시 0점 유지
+    } finally {
+      setLoaded(true);
+    }
+  }, []);
 
   const correct = scoreData.correct ?? 0;
   const total = scoreData.total ?? 0;
 
-  // ✅ 점수별 데이터 매핑 (기존 0~2 기준 + 누적 대응)
   const resultData = {
     2: {
       level: "res_level_3",
@@ -66,58 +60,59 @@ function ResultContent() {
     },
   };
 
-  // ✅ 누적 점수일 때: 2 이상이면 최상급으로 고정(최소 변경)
   const key = correct >= 2 ? 2 : correct >= 1 ? 1 : 0;
   const currentResult = resultData[key as keyof typeof resultData];
 
   const handleRetry = () => {
-    // ✅ 점수 초기화
     localStorage.removeItem(SCORE_KEY);
-    // 필요하면 다른 누적 데이터도 여기서 같이 제거
     router.push("/");
   };
 
-  return (
-    <div className="main01__inner main-common-inner" style={{ textAlign: "center" }}>
-      <Image
-        src={`/images/${currentResult.level}.png`}
-        alt={currentResult.subTitle}
-        width={1536}
-        height={1024}
-        priority
-      />
+  if (!loaded) {
+    return (
+      <section className="main01">
+        <div
+          className="main01__inner main-common-inner"
+          style={{ textAlign: "center", padding: "100px 20px" }}
+        >
+          결과 로딩중...
+        </div>
+      </section>
+    );
+  }
 
-      <h1>
-        정답 : {correct}개 <br />
-        {currentResult.subTitle}
-      </h1>
-
-      <p style={{ whiteSpace: "pre-line" }}>{currentResult.desc}</p>
-
-      {/* ✅ 다시 하기: 버튼으로 처리(초기화 로직 포함) */}
-      <button
-        type="button"
-        onClick={handleRetry}
-        className="common-btn"
-        style={{
-          display: "inline-block",
-          textDecoration: "none",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        다시 테스트하기
-      </button>
-    </div>
-  );
-}
-
-export default function ResultPage() {
   return (
     <section className="main01">
-      <Suspense fallback={<div style={{ textAlign: "center", padding: "100px" }}>결과를 분석 중입니다...</div>}>
-        <ResultContent />
-      </Suspense>
+      <div className="main01__inner main-common-inner" style={{ textAlign: "center" }}>
+        <Image
+          src={`/images/${currentResult.level}.png`}
+          alt={currentResult.subTitle}
+          width={1536}
+          height={1024}
+          priority
+        />
+
+        <h1>
+          정답 : {correct}개 <br />
+          {currentResult.subTitle}
+        </h1>
+
+        <p style={{ whiteSpace: "pre-line" }}>{currentResult.desc}</p>
+
+        <button
+          type="button"
+          onClick={handleRetry}
+          className="common-btn"
+          style={{
+            display: "inline-block",
+            textDecoration: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          다시 테스트하기
+        </button>
+      </div>
     </section>
   );
 }

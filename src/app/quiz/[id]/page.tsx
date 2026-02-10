@@ -266,7 +266,7 @@ export default function QuizPage() {
               style={{
                 padding: "15px 20px",
                 borderRadius: "12px",
-                border: isSelected ? "2px solid #54759a" : "1px solid #e5e8eb",
+                border: isSelected ? "1px solid #54759a" : "1px solid #e5e8eb",
                 backgroundColor: isSelected ? "rgba(84, 117, 154, 0.08)" : "#fff",
                 textAlign: "left",
                 fontSize: "0.9rem",
