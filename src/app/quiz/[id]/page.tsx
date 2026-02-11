@@ -241,7 +241,7 @@ export default function QuizPage() {
 	return (
 		<div
 			style={{
-				padding: "60px 20px",
+				padding: "50px 20px",
 				maxWidth: "500px",
 				margin: "0 auto",
 				fontFamily: "sans-serif",
