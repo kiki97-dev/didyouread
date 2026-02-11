@@ -65,7 +65,7 @@ html {
 /* 메인 */
 /* 메인공용 */
 .main-common-inner {
-	padding: 30px;
+	padding: 30px 20px;
 	min-height: calc(100vh - 50px);
 }
 
