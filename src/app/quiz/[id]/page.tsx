@@ -6,7 +6,7 @@ import { useRouter, useParams } from "next/navigation";
 type RawQuizItem = {
 	question: string;
 	correct: string;
-	wrong: [string, string, string];
+	wrong: string[];
 };
 
 type BuiltQuizItem = {
@@ -65,19 +65,19 @@ export default function QuizPage() {
 	const allQuizData: Record<string, RawQuizItem[]> = {
 		"1": [
 			{
-				question: "개정된 이용약관의 효력 발생일은 언제인가요?",
-				correct: "2026년 3월 15일",
-				wrong: ["2026년 3월 1일", "2026년 4월 1일", "2026년 5월 1일"],
+				question: "교육 일정 \n 이번 워크숍은 언제 진행되나요?",
+				correct: "3월 22일 (금)",
+				wrong: ["3월 10일 (월)", "3월 15일 (토)"],
 			},
 			{
-				question: "보안 강화를 위해 변경된 접속 로그 보관 주기는?",
-				correct: "1년",
-				wrong: ["3개월", "6개월", "무제한"],
+				question: "할인 혜택 \n 얼리버드 할인을 받으려면 언제까지 결제를 완료해야 하나요?",
+				correct: "3월 10일까지",
+				wrong: ["3월 5일까지", "3월 15일까지"],
 			},
 			{
-				question: "약관 개정에 동의하지 않을 경우 사용자의 선택은?",
-				correct: "회원 탈퇴",
-				wrong: ["고객센터 전화", "이메일 문의", "유료 결제"],
+				question: "수강료\n얼리버드 할인가는 얼마인가요?",
+				correct: "144,000원",
+				wrong: ["160,000원", "180,000원"],
 			},
 		],
 		"2": [
@@ -249,6 +249,7 @@ export default function QuizPage() {
 					wordBreak: "keep-all",
 					fontFamily: "Paperlogy",
 					color: "#333",
+					whiteSpace: "pre-line",
 				}}
 			>
 				{currentQuiz.question}
