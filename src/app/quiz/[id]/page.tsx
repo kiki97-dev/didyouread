@@ -207,7 +207,7 @@ export default function QuizPage() {
 					display: "flex",
 					justifyContent: "space-between",
 					alignItems: "center",
-					marginBottom: "18px",
+					marginBottom: "4px",
 				}}
 			>
 				<p
@@ -216,11 +216,11 @@ export default function QuizPage() {
 						fontFamily: "Paperlogy",
 						color: "#54759a",
 						fontWeight: "bold",
-						fontSize: "1.1rem",
+						fontSize: "1.8rem",
 					}}
 				>
 					Q{currentStep + 1}.{" "}
-					<span style={{ fontSize: "0.9rem", color: "#777" }}>
+					<span style={{ fontSize: "1.8rem", color: "#777" }}>
 						({currentStep + 1}/{total})
 					</span>
 				</p>
@@ -230,7 +230,7 @@ export default function QuizPage() {
 						padding: "6px 10px",
 						borderRadius: "10px",
 						border: "1px solid #e5e8eb",
-						fontSize: "0.9rem",
+						fontSize: "1.6rem",
 						fontFamily: "Paperlogy",
 						color: timeLeft <= 5 ? "#c0392b" : "#333",
 						backgroundColor: "#fff",
@@ -242,7 +242,7 @@ export default function QuizPage() {
 
 			<h2
 				style={{
-					fontSize: "1.3rem",
+					fontSize: "2rem",
 					fontWeight: "bold",
 					lineHeight: "1.3",
 					marginBottom: "22px",
@@ -269,7 +269,7 @@ export default function QuizPage() {
 								border: isSelected ? "1px solid #54759a" : "1px solid #e5e8eb",
 								backgroundColor: isSelected ? "rgba(84, 117, 154, 0.08)" : "#fff",
 								textAlign: "left",
-								fontSize: "0.9rem",
+								fontSize: "1.6rem",
 								cursor: "pointer",
 								transition: "all 0.2s ease",
 								color: "#333",
@@ -301,7 +301,7 @@ export default function QuizPage() {
 					border: "none",
 					backgroundColor: "#54759a",
 					color: "#fff",
-					fontSize: "1rem",
+					fontSize: "1.6rem",
 					cursor: "pointer",
 				}}
 			>

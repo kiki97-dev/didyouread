@@ -1,21 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
-	const router = useRouter();
-
-	const handleStart = () => {
-		// 1. 첫 번째 퀴즈인 '1'번으로 고정
-		const quizId = "1";
-		// 2. A안 또는 B안 랜덤 결정
-		const version = Math.random() < 0.5 ? "a" : "b";
-
-		// 3. 쿼리 파라미터로 전달 (/notice/1?type=a)
-		router.push(`/notice/${quizId}?type=${version}`);
-	};
-
 	return (
 		<section className="main01">
 			<div className="main01__inner main-common-inner">
@@ -33,13 +21,7 @@ export default function Home() {
 				</p>
 
 				{/* Link 대신 버튼 클릭 이벤트로 랜덤 라우팅 처리 */}
-				<button
-					className="common-btn"
-					onClick={handleStart}
-					style={{ cursor: "pointer", border: "none" }}
-				>
-					지금 도전하기
-				</button>
+				<Link href="/notification" className="common-btn">지금 도전하기</Link>
 
 				<p>데모 버전 · 총 2문항</p>
 			</div>
