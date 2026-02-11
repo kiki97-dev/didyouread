@@ -131,6 +131,8 @@ export default function QuizPage() {
 		setCurrentStep(0);
 		setSelectedIndex(null);
 		setTimeLeft(15);
+		setPhase("quiz");
+		setIsCorrect(null);
 	}, [id]);
 
 	// ✅ 스텝 바뀌면 선택/타이머 리셋
@@ -161,7 +163,7 @@ export default function QuizPage() {
 		};
 	}, [currentStep, id, currentQuiz, phase]);
 
-	// ✅ 타임아웃 자동 제출
+	// ✅ 타임아웃 → 바로 넘어가지 말고 "해설(review) 화면"으로 전환
 	useEffect(() => {
 		if (phase !== "quiz") return;
 		if (timeLeft > 0) return;
@@ -171,7 +173,14 @@ export default function QuizPage() {
 			timerRef.current = null;
 		}
 
-		submitAndGoNext(selectedIndex); // 선택 없으면 null -> 오답
+		// ✅ 선택 안 했으면 null → 무조건 오답 처리
+		const correct = selectedIndex !== null && selectedIndex === currentQuiz.correctIndex;
+
+		setIsCorrect(correct);
+		setPhase("review");
+
+		// ✅ 여기서 submitAndGoNext 호출하지 않음!
+		// (다음 버튼 눌렀을 때 submitAndGoNext 실행)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [timeLeft, phase]);
 
@@ -217,9 +226,14 @@ export default function QuizPage() {
 			return;
 		}
 
-		// review 단계 → 진짜 다음으로
-		submitAndGoNext(selectedIndex);
+		// ✅ review 단계: 다음 문제로 가기 전에 먼저 리셋 (중요!!)
+		setTimeLeft(15);
+		setSelectedIndex(null);
+		setIsCorrect(null);
 		setPhase("quiz");
+
+		// ✅ 점수 반영 + 다음 문제 이동 (인자로 넘기니까 위에서 selectedIndex null로 바꿔도 OK)
+		submitAndGoNext(selectedIndex);
 	};
 
 	if (!currentQuiz) return null;
