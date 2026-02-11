@@ -7,6 +7,7 @@ type RawQuizItem = {
 	question: string;
 	correct: string;
 	wrong: string[];
+	explain: string;
 };
 
 type BuiltQuizItem = {
@@ -62,22 +63,28 @@ export default function QuizPage() {
 	const [timeLeft, setTimeLeft] = useState(15);
 	const timerRef = useRef<number | null>(null);
 
+	const [phase, setPhase] = useState<"quiz" | "review">("quiz");
+	const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
 	const allQuizData: Record<string, RawQuizItem[]> = {
 		"1": [
 			{
 				question: "교육 일정 \n 이번 워크숍은 언제 진행되나요?",
 				correct: "3월 22일 (금)",
 				wrong: ["3월 10일 (월)", "3월 15일 (토)"],
+				explain: "교육은 2026년 3월 22일 (금요일) 13:00~18:00에 진행됩니다.",
 			},
 			{
 				question: "할인 혜택 \n 얼리버드 할인을 받으려면 언제까지 결제를 완료해야 하나요?",
 				correct: "3월 10일까지",
 				wrong: ["3월 5일까지", "3월 15일까지"],
+				explain: "얼리버드 할인은 2026년 3월 10일 (월) 23:59까지 결제 완료 시 적용됩니다.",
 			},
 			{
 				question: "수강료\n얼리버드 할인가는 얼마인가요?",
 				correct: "144,000원",
 				wrong: ["160,000원", "180,000원"],
+				explain: "정가 180,000원에서 20% 할인된 144,000원입니다.",
 			},
 		],
 		"2": [
@@ -85,16 +92,19 @@ export default function QuizPage() {
 				question: "4월 1일 이후에도 복지포인트를 계속 쓸 수 있는 곳은?",
 				correct: "헬스장",
 				wrong: ["영화관", "서점", "여행사"],
+				explain: "건강관리 항목에 포함",
 			},
 			{
 				question: "영화 보러 갈 때 복지포인트를 쓰려면 언제까지 써야 하나?",
 				correct: "3월 말까지",
 				wrong: ["2월 말까지", "4월 말까지", "언제든지 가능"],
+				explain: "",
 			},
 			{
 				question: "이번 변경으로 복지포인트를 쓸 수 있는 항목이 몇 개로 줄어드나?",
 				correct: "2개",
 				wrong: ["1개", "5개", "7개"],
+				explain: "자기계발, 건강관리",
 			},
 		],
 	};
@@ -131,6 +141,7 @@ export default function QuizPage() {
 
 	// ✅ 타이머 시작
 	useEffect(() => {
+		if (phase !== "quiz") return;
 		if (!currentQuiz) return;
 
 		if (timerRef.current) {
@@ -148,10 +159,11 @@ export default function QuizPage() {
 				timerRef.current = null;
 			}
 		};
-	}, [currentStep, id, currentQuiz]);
+	}, [currentStep, id, currentQuiz, phase]);
 
 	// ✅ 타임아웃 자동 제출
 	useEffect(() => {
+		if (phase !== "quiz") return;
 		if (timeLeft > 0) return;
 
 		if (timerRef.current) {
@@ -161,7 +173,7 @@ export default function QuizPage() {
 
 		submitAndGoNext(selectedIndex); // 선택 없으면 null -> 오답
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [timeLeft]);
+	}, [timeLeft, phase]);
 
 	const submitAndGoNext = (picked: number | null) => {
 		const isCorrect = picked !== null && picked === currentQuiz.correctIndex;
@@ -197,7 +209,17 @@ export default function QuizPage() {
 	};
 
 	const handleNextClick = () => {
+		if (phase === "quiz") {
+			const correct = selectedIndex !== null && selectedIndex === currentQuiz.correctIndex;
+
+			setIsCorrect(correct);
+			setPhase("review");
+			return;
+		}
+
+		// review 단계 → 진짜 다음으로
 		submitAndGoNext(selectedIndex);
+		setPhase("quiz");
 	};
 
 	if (!currentQuiz) return null;
@@ -269,27 +291,55 @@ export default function QuizPage() {
 				{currentQuiz.options.map((option, index) => {
 					const isSelected = selectedIndex === index;
 
+					// ✅ (6번) review 단계에서 정답/오답 표시용 계산
+					const showReview = phase === "review";
+					const isAnswer = index === currentQuiz.correctIndex; // 정답 옵션인가?
+					const isPicked = selectedIndex === index; // 내가 고른 옵션인가?
+
+					let borderColor = isSelected ? "#54759a" : "#e5e8eb";
+					let backgroundColor = isSelected ? "rgba(84, 117, 154, 0.08)" : "#fff";
+
+					// review 단계에서는 색상을 “채점 기준”으로 덮어씀
+					if (showReview) {
+						if (isAnswer) {
+							borderColor = "#2ecc71";
+							backgroundColor = "rgba(46, 204, 113, 0.12)";
+						} else if (isPicked && !isAnswer) {
+							borderColor = "#e74c3c";
+							backgroundColor = "rgba(231, 76, 60, 0.10)";
+						} else {
+							borderColor = "#e5e8eb";
+							backgroundColor = "#fff";
+						}
+					}
+
 					return (
 						<button
 							key={index}
 							type="button"
-							onClick={() => setSelectedIndex(index)}
+							onClick={() => {
+								// ✅ (5번) review 단계면 클릭 막기
+								if (phase === "review") return;
+								setSelectedIndex(index);
+							}}
 							style={{
 								padding: "15px 20px",
 								borderRadius: "12px",
-								border: isSelected ? "1px solid #54759a" : "1px solid #e5e8eb",
-								backgroundColor: isSelected ? "rgba(84, 117, 154, 0.08)" : "#fff",
+								border: `1px solid ${borderColor}`,
+								backgroundColor,
 								textAlign: "left",
 								fontSize: "1.6rem",
-								cursor: "pointer",
+								cursor: phase === "review" ? "default" : "pointer",
 								transition: "all 0.2s ease",
 								color: "#333",
 								transform: isSelected ? "translateY(-1px)" : "none",
 							}}
 							onMouseOver={(e) => {
+								if (phase === "review") return;
 								e.currentTarget.style.borderColor = "#54759a";
 							}}
 							onMouseOut={(e) => {
+								if (phase === "review") return;
 								e.currentTarget.style.borderColor = isSelected
 									? "#54759a"
 									: "#e5e8eb";
@@ -300,6 +350,39 @@ export default function QuizPage() {
 					);
 				})}
 			</div>
+
+			{phase === "review" && (
+				<div
+					style={{
+						marginTop: "18px",
+						padding: "14px",
+						borderRadius: "12px",
+						border: "1px solid #e5e8eb",
+						backgroundColor: "#fafafa",
+						fontFamily: "Paperlogy",
+					}}
+				>
+					<div
+						style={{
+							fontWeight: "bold",
+							marginBottom: "8px",
+							fontSize: "1.6rem",
+						}}
+					>
+						{isCorrect ? "✅ 정답입니다!" : "❌ 오답입니다."}
+					</div>
+
+					<div
+						style={{
+							whiteSpace: "pre-line",
+							fontSize: "1.5rem",
+							color: "#444",
+						}}
+					>
+						{rawQuizData[currentStep].explain}
+					</div>
+				</div>
+			)}
 
 			<button
 				type="button"
