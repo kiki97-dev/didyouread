@@ -214,3 +214,29 @@ html {
 .notice-wrap a {
 	text-decoration: underline;
 }
+
+
+.result-btn-wrap {
+	display: flex;
+	gap: 10px;
+	width: 100%;
+}
+
+
+.result-btn01 {
+	font-size: 1.6rem;
+	color: #fff;
+	padding: 12px 20px;
+	border-radius: 10px;
+	border: 1px solid #89a9d0;
+	color: #54759a;
+}
+
+.result-btn02 {
+	font-size: 1.6rem;
+	color: #fff;
+	padding: 12px 20px;
+	border-radius: 10px;
+	background: linear-gradient(91deg, #89a9d0 1.24%, #54759a 100%);
+	flex: 1 0;
+}
