@@ -21,13 +21,15 @@ export default function Home() {
 			<div className="main01__inner main-common-inner">
 				<Image src="/images/main01.png" alt="설명 문구" width={1536} height={1024} />
 				<h1>
-					공지사항, <br />
-					어디까지 읽어봤니?
+					읽은 줄 알았지? <br />
+					진짜 읽었는지 확인해 보기
 				</h1>
 				<p>
-					공지사항의 구성 방식이 정보 이해도와 읽기 지속성에 <br />
-					어떤 영향을 미치는지 확인하는 실험 프로젝트입니다. <br />
-					아래 버튼을 눌러 공지사항을 읽고 퀴즈에 참여해 보세요.
+					공지사항 읽는 척만 하고 있진 않으신가요? <br />
+					지금 바로 확인해 보세요! <br />
+					<br />
+					실제 공지 형식으로 만든 2개의 글, <br />
+					읽고 나면 짧은 퀴즈가 기다리고 있어요.
 				</p>
 
 				{/* Link 대신 버튼 클릭 이벤트로 랜덤 라우팅 처리 */}
@@ -36,8 +38,12 @@ export default function Home() {
 					onClick={handleStart}
 					style={{ cursor: "pointer", border: "none" }}
 				>
-					시작하기
+					지금 도전하기
 				</button>
+
+				<p>
+					데모 버전 · 총 2문항
+				</p>
 			</div>
 		</section>
 	);

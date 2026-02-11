@@ -1,8 +1,13 @@
-import type { Metadata } from "next";
-import "./reset.css";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import ShareButton from "./components/ShareButton";
 import Link from "next/link";
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	// maximumScale: 1, // 필요에 따라 추가
+};
 
 export const metadata: Metadata = {
 	title: "디주릿",
