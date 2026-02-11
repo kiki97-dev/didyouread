@@ -59,7 +59,7 @@ export default function QuizPage() {
 	const [currentStep, setCurrentStep] = useState(0);
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-	const [timeLeft, setTimeLeft] = useState(30);
+	const [timeLeft, setTimeLeft] = useState(15);
 	const timerRef = useRef<number | null>(null);
 
 	const allQuizData: Record<string, RawQuizItem[]> = {
@@ -110,13 +110,13 @@ export default function QuizPage() {
 	useEffect(() => {
 		setCurrentStep(0);
 		setSelectedIndex(null);
-		setTimeLeft(30);
+		setTimeLeft(15);
 	}, [id]);
 
 	// ✅ 스텝 바뀌면 선택/타이머 리셋
 	useEffect(() => {
 		setSelectedIndex(null);
-		setTimeLeft(30);
+		setTimeLeft(15);
 	}, [currentStep]);
 
 	// ✅ 타이머 시작
