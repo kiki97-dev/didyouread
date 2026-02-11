@@ -41,9 +41,7 @@ export default function Home() {
 					지금 도전하기
 				</button>
 
-				<p>
-					데모 버전 · 총 2문항
-				</p>
+				<p>데모 버전 · 총 2문항</p>
 			</div>
 		</section>
 	);

@@ -33,13 +33,19 @@ export default function QuizModal({ onConfirm }: QuizModalProps) {
 					animation: "modalUp 0.4s ease-out",
 				}}
 			>
-				<h3 style={{ marginBottom: "20px", fontSize: "1.2rem", fontWeight: "bold" }}>
+				<h3 style={{ marginBottom: "20px", fontSize: "2rem", fontWeight: "bold" }}>
 					📖 읽기 완료!
 				</h3>
-				<p style={{ color: "#666", fontSize: "0.9rem", marginBottom: "20px", lineHeight: "1.4" }}>
-					내용을 모두 확인하셨나요?
-					<br />
-					본문 내용을 바탕으로 퀴즈를 풀어보세요.
+				<p
+					style={{
+						color: "#666",
+						fontSize: "1.6rem",
+						marginBottom: "20px",
+						lineHeight: "1.4",
+					}}
+				>
+					이제 진짜 읽었는지 확인할 차례입니다. <br />
+					퀴즈로 바로 가볼까요?
 				</p>
 				<button
 					onClick={onConfirm}
@@ -50,7 +56,7 @@ export default function QuizModal({ onConfirm }: QuizModalProps) {
 						backgroundColor: "#54759a",
 						color: "#fff",
 						border: "none",
-						fontSize: "0.9rem",
+						fontSize: "1.6rem",
 						fontWeight: "500",
 						cursor: "pointer",
 					}}
