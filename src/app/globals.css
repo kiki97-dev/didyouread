@@ -12,7 +12,7 @@ html {
 
 @media (max-width: 400px) {
 	html {
-		font-size: 50%; /* 8px로 축소 */
+		font-size: 56%; /* 8px로 축소 */
 	}
 }
 
@@ -76,7 +76,7 @@ html {
 	width: 100%;
 	font-size: 1.6rem;
 	color: #fff;
-	padding: 18px 20px;
+	padding: 16px 20px;
 	border-radius: 30px;
 	background: linear-gradient(91deg, #89a9d0 1.24%, #54759a 100%);
 }
@@ -213,6 +213,7 @@ html {
 
 .notice-wrap a {
 	text-decoration: underline;
+	word-break: break-all;
 }
 
 
