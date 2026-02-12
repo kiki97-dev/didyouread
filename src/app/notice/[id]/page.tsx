@@ -36,7 +36,7 @@ export default async function NoticePage({
 	return (
 		<div>
 			{/* 주소창을 청소합니다) */}
-			<UrlCleaner />
+			{/* <UrlCleaner /> */}
 
 			<div className="notice-wrap">
 				<ReactMarkdown remarkPlugins={[remarkGfm]}>{file}</ReactMarkdown>

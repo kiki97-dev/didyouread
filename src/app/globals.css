@@ -151,7 +151,7 @@ html {
 
 .notice-wrap h2 {
 	font-size: 1.8rem;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 .notice-wrap h3 {
 	font-size: 1.6rem;
@@ -209,6 +209,7 @@ html {
 	vertical-align: middle;
 }
 .notice-wrap strong {
+	font-weight: 700;
 }
 
 .notice-wrap a {
