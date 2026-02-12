@@ -151,35 +151,29 @@ export default function ShareModal({ open, onClose, text }: Props) {
 				<div
 					style={{
 						display: "grid",
-						gridTemplateColumns: "repeat(5, 1fr)",
+						gridTemplateColumns: "repeat(4, 1fr)",
 						gap: 10,
 					}}
 				>
 					<ShareIconButton
-						icon={<SiKakaotalk size={22} />}
+						icon={<SiKakaotalk size={20} />}
 						label="카카오톡"
 						onClick={copyLink}
 					/>
 
 					<ShareIconButton
-						icon={<FaInstagram size={22} />}
+						icon={<FaInstagram size={20} />}
 						label="Instagram"
 						onClick={copyLink}
 					/>
 
 					<ShareIconButton
-						icon={<SiThreads size={22} />}
+						icon={<SiThreads size={20} />}
 						label="Threads"
 						onClick={shareToThreads}
 					/>
 
-					<ShareIconButton icon={<FaXTwitter size={22} />} label="X" onClick={shareToX} />
-
-					<ShareIconButton
-						icon={<FaLink size={22} />}
-						label="링크복사"
-						onClick={copyLink}
-					/>
+					<ShareIconButton icon={<FaXTwitter size={20} />} label="X" onClick={shareToX} />
 				</div>
 
 				<div style={{ marginTop: 14 }}>
@@ -209,7 +203,7 @@ export default function ShareModal({ open, onClose, text }: Props) {
 								padding: "10px 12px",
 								borderRadius: 10,
 								border: "1px solid #e5e5e5",
-								background: "#111",
+								background: "#54759a",
 								color: "#fff",
 								cursor: "pointer",
 								whiteSpace: "nowrap",
@@ -251,8 +245,8 @@ function ShareIconButton({
 		>
 			<div
 				style={{
-					width: 44,
-					height: 44,
+					width: 40,
+					height: 40,
 					borderRadius: 999,
 					border: "1px solid #e9e9e9",
 					display: "grid",
@@ -262,7 +256,7 @@ function ShareIconButton({
 				{icon}
 			</div>
 
-			<div style={{ fontSize: 12, fontWeight: 500 }}>{label}</div>
+			<div style={{ fontSize: '1.2rem', fontWeight: 500 }}>{label}</div>
 		</button>
 	);
 }
