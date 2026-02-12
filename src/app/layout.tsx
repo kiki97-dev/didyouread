@@ -6,7 +6,6 @@ import Link from "next/link";
 export const viewport: Viewport = {
 	width: "device-width",
 	initialScale: 1,
-	// maximumScale: 1, // 필요에 따라 추가
 };
 
 export const metadata: Metadata = {
@@ -35,7 +34,6 @@ export default function RootLayout({
 							<h1 className="header__title">
 								<Link href="/">DIDYOUREAD</Link>
 							</h1>
-
 							<ShareButton />
 						</div>
 					</header>
