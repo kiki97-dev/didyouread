@@ -4,13 +4,21 @@ import React from "react";
 
 export default function ShareButton() {
 	
+	/**
+	 * @description 현재 사이트의 메인 주소를 복사하는 함수입니다.
+	 * @async 비동기 방식으로 작동하여 복사 완료를 기다립니다.
+	 */
 	const handleCopy = async () => {
 		try {
-			// 현재 페이지의 루트 URL (프로토콜 + 호스트) 가져오기
+			/** @constant {string} rootUrl - 브라우저에서 알아낸 현재 사이트의 루트 URL */
 			const rootUrl = window.location.origin;
+
+			// 클립보드에 주소를 복사 (완료될 때까지 대기)
 			await navigator.clipboard.writeText(rootUrl);
+
 			alert("URL이 복사되었습니다.");
 		} catch (err) {
+			/** @todo 복사 실패 시 사용자에게 알림 및 에러 로그 출력 */
 			console.error("복사 실패:", err);
 			alert("URL 복사에 실패했습니다.");
 		}

@@ -4,44 +4,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import ProgressBar from "./_components/ProgressBar";
 import QuizModal from "./_components/QuizModal";
+import { useUserInteraction } from "./_hooks/useUserInteraction";
 
 export default function NoticeLayout({ children }: { children: React.ReactNode }) {
-	const [showQuiz, setShowQuiz] = useState(false);
-
-	// ✅ A버전: 사용자 입력(스크롤 의도) 1회 이상 감지
-	const [hasUserInteracted, setHasUserInteracted] = useState(false);
-
 	const router = useRouter();
 	const { id } = useParams();
 
+	/** @description 유저의 첫 스크롤/터치 활동 여부를 감지하여 가져옵니다. */
+	const hasUserInteracted = useUserInteraction();
+
+	const [showQuiz, setShowQuiz] = useState(false);
 	const bottomRef = useRef<HTMLDivElement | null>(null);
 	const dwellTimerRef = useRef<number | null>(null);
-
-	// ✅ 사용자 입력(스크롤 의도) 1회 감지
-	useEffect(() => {
-		if (hasUserInteracted) return;
-
-		const mark = () => setHasUserInteracted(true);
-
-		const onWheel = () => mark();
-		const onTouchMove = () => mark();
-		const onKeyDown = (e: KeyboardEvent) => {
-			const keys = ["ArrowDown", "PageDown", " ", "End"];
-			if (keys.includes(e.key)) mark();
-		};
-
-		window.addEventListener("wheel", onWheel, { passive: true });
-		window.addEventListener("touchmove", onTouchMove, { passive: true });
-		window.addEventListener("keydown", onKeyDown);
-
-		return () => {
-			window.removeEventListener("wheel", onWheel);
-			window.removeEventListener("touchmove", onTouchMove);
-			window.removeEventListener("keydown", onKeyDown);
-		};
-	}, [hasUserInteracted]);
-
-	// ✅ 하단 도달 + 머문 시간(0.8s) + 사용자 입력 1회 조건
 	useEffect(() => {
 		if (!bottomRef.current) return;
 
