@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,7 +18,6 @@ export default function Home() {
 					읽고 나면 짧은 퀴즈가 기다리고 있어요.
 				</p>
 
-				{/* Link 대신 버튼 클릭 이벤트로 랜덤 라우팅 처리 */}
 				<Link href="/notification" className="common-btn">지금 도전하기</Link>
 
 				<p>데모 버전 · 총 2문항</p>
