@@ -7,6 +7,8 @@ import { shuffle, readScore, writeScore } from "../_utils/quizUtils";
 import QuizHeader from "../_components/QuizHeader";
 import QuizQuestion from "../_components/QuizQuestion";
 import QuizOptions from "../_components/QuizOptions";
+import QuizReview from "../_components/QuizReview";
+import NextButton from "../_components/NextButton";
 
 type BuiltQuizItem = {
 	question: string;
@@ -175,8 +177,10 @@ export default function QuizPage() {
 			{/* 퀴즈 진행도 + 타이머 */}
 			<QuizHeader currentStep={currentStep} total={total} timeLeft={timeLeft} />
 
+			{/* 퀴즈 질문 */}
 			<QuizQuestion question={currentQuiz.question} />
 
+			{/* 퀴즈 선택지 */}
 			<QuizOptions
 				options={currentQuiz.options}
 				selectedIndex={selectedIndex}
@@ -188,56 +192,15 @@ export default function QuizPage() {
 				}}
 			/>
 
+			{/* 정답 여부와 해설 */}
 			{phase === "review" && (
-				<div
-					style={{
-						marginTop: "18px",
-						padding: "14px",
-						borderRadius: "12px",
-						border: "1px solid #e5e8eb",
-						backgroundColor: "#fafafa",
-						fontFamily: "Paperlogy",
-					}}
-				>
-					<div
-						style={{
-							fontWeight: "bold",
-							marginBottom: "8px",
-							fontSize: "1.6rem",
-						}}
-					>
-						{isCorrect ? "✅ 정답입니다!" : "❌ 오답입니다."}
-					</div>
-
-					<div
-						style={{
-							whiteSpace: "pre-line",
-							fontSize: "1.5rem",
-							color: "#444",
-						}}
-					>
-						{rawQuizData[currentStep].explain}
-					</div>
-				</div>
+				<QuizReview isCorrect={isCorrect} explain={rawQuizData[currentStep].explain} />
 			)}
 
-			<button
-				type="button"
+			<NextButton
+				label={currentStep === total - 1 ? "완료" : "다음"}
 				onClick={handleNextClick}
-				style={{
-					marginTop: "22px",
-					width: "100%",
-					padding: "14px 16px",
-					borderRadius: "12px",
-					border: "none",
-					backgroundColor: "#54759a",
-					color: "#fff",
-					fontSize: "1.6rem",
-					cursor: "pointer",
-				}}
-			>
-				{currentStep === total - 1 ? "완료" : "다음"}
-			</button>
+			/>
 		</div>
 	);
 }
