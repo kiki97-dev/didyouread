@@ -5,6 +5,8 @@ import { useRouter, useParams } from "next/navigation";
 import { allQuizData } from "../_data/quizData";
 import { shuffle, readScore, writeScore } from "../_utils/quizUtils";
 import QuizHeader from "../_components/QuizHeader";
+import QuizQuestion from "../_components/QuizQuestion";
+import QuizOptions from "../_components/QuizOptions";
 
 type BuiltQuizItem = {
 	question: string;
@@ -170,87 +172,21 @@ export default function QuizPage() {
 				fontFamily: "sans-serif",
 			}}
 		>
-			{/* 타이머 + 진행 */}
+			{/* 퀴즈 진행도 + 타이머 */}
 			<QuizHeader currentStep={currentStep} total={total} timeLeft={timeLeft} />
 
-			<h2
-				style={{
-					fontSize: "2rem",
-					fontWeight: "bold",
-					lineHeight: "1.3",
-					marginBottom: "22px",
-					wordBreak: "keep-all",
-					fontFamily: "Paperlogy",
-					color: "#333",
-					whiteSpace: "pre-line",
+			<QuizQuestion question={currentQuiz.question} />
+
+			<QuizOptions
+				options={currentQuiz.options}
+				selectedIndex={selectedIndex}
+				correctIndex={currentQuiz.correctIndex}
+				phase={phase}
+				onSelect={(index) => {
+					if (phase === "review") return; // 해설 중엔 클릭 막기
+					setSelectedIndex(index);
 				}}
-			>
-				{currentQuiz.question}
-			</h2>
-
-			<div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-				{currentQuiz.options.map((option, index) => {
-					const isSelected = selectedIndex === index;
-
-					// ✅ (6번) review 단계에서 정답/오답 표시용 계산
-					const showReview = phase === "review";
-					const isAnswer = index === currentQuiz.correctIndex; // 정답 옵션인가?
-					const isPicked = selectedIndex === index; // 내가 고른 옵션인가?
-
-					let borderColor = isSelected ? "#54759a" : "#e5e8eb";
-					let backgroundColor = isSelected ? "rgba(84, 117, 154, 0.08)" : "#fff";
-
-					// review 단계에서는 색상을 “채점 기준”으로 덮어씀
-					if (showReview) {
-						if (isAnswer) {
-							borderColor = "#2ecc71";
-							backgroundColor = "rgba(46, 204, 113, 0.12)";
-						} else if (isPicked && !isAnswer) {
-							borderColor = "#e74c3c";
-							backgroundColor = "rgba(231, 76, 60, 0.10)";
-						} else {
-							borderColor = "#e5e8eb";
-							backgroundColor = "#fff";
-						}
-					}
-
-					return (
-						<button
-							key={index}
-							type="button"
-							onClick={() => {
-								// ✅ (5번) review 단계면 클릭 막기
-								if (phase === "review") return;
-								setSelectedIndex(index);
-							}}
-							style={{
-								padding: "15px 20px",
-								borderRadius: "12px",
-								border: `1px solid ${borderColor}`,
-								backgroundColor,
-								textAlign: "left",
-								fontSize: "1.6rem",
-								cursor: phase === "review" ? "default" : "pointer",
-								transition: "all 0.2s ease",
-								color: "#333",
-								transform: isSelected ? "translateY(-1px)" : "none",
-							}}
-							onMouseOver={(e) => {
-								if (phase === "review") return;
-								e.currentTarget.style.borderColor = "#54759a";
-							}}
-							onMouseOut={(e) => {
-								if (phase === "review") return;
-								e.currentTarget.style.borderColor = isSelected
-									? "#54759a"
-									: "#e5e8eb";
-							}}
-						>
-							{option}
-						</button>
-					);
-				})}
-			</div>
+			/>
 
 			{phase === "review" && (
 				<div
