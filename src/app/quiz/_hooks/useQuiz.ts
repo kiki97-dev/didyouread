@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { allQuizData } from "../_data/quizData";
+import { allQuizData, type RawQuizItem } from "../_data/quizData";
 import { shuffle, readScore, writeScore } from "../_utils/quizUtils";
 
 /**
@@ -53,7 +53,7 @@ export function useQuiz(): UseQuizReturn {
 	 * @dependency [id] : 퀴즈 세션이 변경될 때만 재계산하여 선택지 순서 고정
 	 */
 	const builtQuizData = useMemo(() => {
-		return rawQuizData.map((q) => {
+		return rawQuizData.map((q: RawQuizItem) => {
 			const mixed = shuffle([q.correct, ...q.wrong]);
 			return {
 				question: q.question,
