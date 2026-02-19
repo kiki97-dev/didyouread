@@ -2,6 +2,9 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+/**
+ * @description 안내사항 페이지
+ */
 export default function NotificationPage() {
 	const router = useRouter();
 
