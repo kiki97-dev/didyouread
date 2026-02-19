@@ -7,18 +7,6 @@ import QuizReview from "../_components/QuizReview";
 import NextButton from "../_components/NextButton";
 import { useQuiz } from "../_hooks/useQuiz";
 
-type BuiltQuizItem = {
-	question: string;
-	options: string[];
-	correctIndex: number;
-};
-
-type Score = {
-	correct: number;
-	total: number;
-	updatedAt: number;
-};
-
 export default function QuizPage() {
 	const {
 		currentStep,
