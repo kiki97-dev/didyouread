@@ -43,10 +43,16 @@ export default function RootLayout({
 						<div className="footer__inner">
 							<ul className="footer-list">
 								<li>
-									<Link href={"/"}>개인정보</Link>
+									<Link href={"/"}>개인정보처리방침</Link>
 								</li>
 								<li>
-									<Link href={"/"}>문의(오픈채팅)</Link>
+									<Link
+										href={"https://open.kakao.com/o/su37zPfi"}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										문의(오픈채팅)
+									</Link>
 								</li>
 								<li>
 									<p>
