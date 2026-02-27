@@ -50,29 +50,29 @@ export default function ResultPage() {
 
 	const resultData = {
 		6: {
-			level: "res_level_3", // 이미지 파일명은 프로젝트 상황에 맞게 조정하세요!
+			level: "res_level_5", // 이미지 파일명은 프로젝트 상황에 맞게 조정하세요!
 			subTitle: "공지계의 알파고",
 			desc: "혹시 눈이 스캐너인가요?\n복잡한 줄글 속에서도 핵심만 쏙쏙 골라내는\n문해력 상위 1%의 소유자입니다.",
 		},
 		5: {
-			level: "res_level_2",
+			level: "res_level_4",
 			subTitle: "요약본 수집가+",
 			desc: "거의 완벽합니다.\n딱 한 줄만 아쉬웠을 뿐이에요.\n그래도 충분히 멋졌습니다!",
 		},
 		4: {
-			level: "res_level_2",
+			level: "res_level_3",
 			subTitle: "요약본 수집가",
 			desc: "핵심은 잡았지만,\n디테일 하나가 스크롤과 함께 흘러가 버렸네요.",
 		},
 		2: {
 			// 2, 3개를 포함하는 구간 (대표 키값 2)
-			level: "res_level_1",
+			level: "res_level_2",
 			subTitle: "스크롤 스피드레이서",
 			desc: "스크롤 속도가 상당히 인상적이었어요!\n공지사항이 따라오기 힘들었을지도 모르겠네요.",
 		},
 		0: {
 			// 0, 1개를 포함하는 구간 (대표 키값 0)
-			level: null,
+			level: "res_level_1",
 			subTitle: "",
 			desc: "아아.....\n눈은 분명히 움직였는데,\n의미는 끝내 머물지 않았습니다.",
 		},
@@ -109,17 +109,13 @@ export default function ResultPage() {
 		<section className="main01">
 			<div className="main01__inner main-common-inner" style={{ textAlign: "center" }}>
 				{/* 결과 비주얼 */}
-				{currentResult.level ? (
-					<Image
-						src={`/images/${currentResult.level}.png`}
-						alt={currentResult.subTitle}
-						width={1536}
-						height={1024}
-						priority
-					/>
-				) : (
-					<div style={{ height: "30px" }} /> // 이미지 없는 등급(0-1점)일 때의 여백
-				)}
+				<Image
+					src={`/images/${currentResult.level}.png`}
+					alt={currentResult.subTitle}
+					width={1536}
+					height={1024}
+					priority
+				/>
 
 				{/* 결과 텍스트 */}
 				<h1>
