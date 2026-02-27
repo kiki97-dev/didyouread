@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ShareModal from "./_components/ShareModal";
+import Link from "next/link";
 
 /** [Constants & Types] 페이지 공통 설정 */
 const SCORE_KEY = "quiz_score";
@@ -25,9 +26,16 @@ export default function ResultPage() {
 	const [open, setOpen] = useState(false); // 공유 모달 상태
 	const [loaded, setLoaded] = useState(false); // 로딩 완료 여부
 	const [scoreData, setScoreData] = useState<Score>({ correct: 0, total: 0 });
+	const [uid, setUid] = useState<string>(""); //사용자 식별아이디
 
 	/* --- [Effect] 데이터 로드 --- */
 	useEffect(() => {
+		// 클라이언트 사이드에서 UID 가져오기
+		if (typeof window !== "undefined") {
+			const savedUid = localStorage.getItem("user_id") || "anonymous";
+			setUid(savedUid);
+		}
+
 		try {
 			const raw = localStorage.getItem(SCORE_KEY);
 			if (raw) {
@@ -91,6 +99,13 @@ export default function ResultPage() {
 		router.push("/");
 	};
 
+	// 구글 폼 기본 주소 (뒤에 entry ID를 확인해서 바꿔주세요!)
+	const googleFormBaseUrl =
+		"https://docs.google.com/forms/d/e/1FAIpQLSemKZQ7zBeBJWWiwUqZAJkUth9imjqgRqSd01G3t-EbodVuag/viewform";
+	const entryId = "entry.123456789"; // 1단계에서 확인한 번호로 교체 필수!
+
+	const feedbackLink = `${googleFormBaseUrl}?usp=pp_url&${entryId}=${uid}`;
+
 	/* --- [View] 렌더링 구간 --- */
 	if (!loaded) {
 		return (
@@ -133,6 +148,14 @@ export default function ResultPage() {
 						공유하기
 					</button>
 				</div>
+				<Link
+					href={feedbackLink}
+					rel="noopener noreferrer"
+					target="_blank"
+					className="result-btn01"
+				>
+					1분 피드백 참여하고 스벅 쿠폰 2만원 받기 ☕
+				</Link>
 
 				<ShareModal
 					text={currentResult.subTitle}
