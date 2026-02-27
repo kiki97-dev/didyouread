@@ -3,6 +3,7 @@ import "./globals.css";
 import ShareButton from "./components/ShareButton";
 import Link from "next/link";
 import Script from "next/script";
+import Footer from "./components/Footer";
 
 export const viewport: Viewport = {
 	width: "device-width",
@@ -39,35 +40,7 @@ export default function RootLayout({
 						</div>
 					</header>
 					{children}
-					<footer className="footer">
-						<div className="footer__inner">
-							<ul className="footer-list">
-								<li>
-									<Link href={"/"}>개인정보처리방침</Link>
-								</li>
-								<li>
-									<Link
-										href={"https://open.kakao.com/o/su37zPfi"}
-										target="_blank"
-										rel="noopener noreferrer"
-									>
-										문의(오픈채팅)
-									</Link>
-								</li>
-								<li>
-									<p>
-										{/* 방문자 수 (같은 사람이 새로고침해도 하루 한 번만 카운트) */}
-										today : <span id="busuanzi_value_site_uv">--</span> &nbsp;
-										{/* 전체 페이지 뷰 (새로고침하면 올라감) */}
-										total : <span id="busuanzi_value_site_pv">--</span>
-									</p>
-								</li>
-								<li>
-									<p>© 2026 DIDYOUREAD. All rights reserved.</p>
-								</li>
-							</ul>
-						</div>
-					</footer>
+					<Footer />
 				</section>
 				{/* 방문자수 스크립트 */}
 				<Script
