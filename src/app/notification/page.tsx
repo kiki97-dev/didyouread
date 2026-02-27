@@ -11,8 +11,10 @@ export default function NotificationPage() {
 	const handleStart = () => {
 		// 1. 첫 번째 퀴즈인 '1'번으로 고정
 		const quizId = "1";
-		// 2. A안 또는 B안 랜덤 결정
-		const version = Math.random() < 0.5 ? "a" : "b";
+		// 2. A, B, C, D안 중 하나를 랜덤 결정
+		const versions = ["a", "b", "c", "d"];
+		const randomIndex = Math.floor(Math.random() * versions.length);
+		const version = versions[randomIndex];
 
 		// 3. 쿼리 파라미터로 전달 (/notice/1?type=a)
 		router.push(`/notice/${quizId}?type=${version}`);

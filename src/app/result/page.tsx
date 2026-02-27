@@ -49,28 +49,40 @@ export default function ResultPage() {
 	const correct = scoreData.correct ?? 0;
 
 	const resultData = {
-		2: {
-			level: "res_level_3",
-			title: "2개",
+		6: {
+			level: "res_level_3", // 이미지 파일명은 프로젝트 상황에 맞게 조정하세요!
 			subTitle: "공지계의 알파고",
-			desc: "당신의 눈은 스캐너인가요?\n복잡한 줄글 속에서도 핵심만 쏙쏙 골라내는\n문해력 상위 1%의 소유자입니다.",
+			desc: "혹시 눈이 스캐너인가요?\n복잡한 줄글 속에서도 핵심만 쏙쏙 골라내는\n문해력 상위 1%의 소유자입니다.",
 		},
-		1: {
+		5: {
 			level: "res_level_2",
-			title: "1개",
+			subTitle: "요약본 수집가+",
+			desc: "거의 완벽합니다.\n딱 한 줄만 아쉬웠을 뿐이에요.\n그래도 충분히 멋졌습니다!",
+		},
+		4: {
+			level: "res_level_2",
 			subTitle: "요약본 수집가",
-			desc: "중요 정보 하나는 건졌지만,\n나머지 하나는 스크롤과 함께 흘려보냈군요.\n2% 부족한 당신, 세 줄 요약이 시급합니다!",
+			desc: "핵심은 잡았지만,\n디테일 하나가 스크롤과 함께 흘러가 버렸네요.",
+		},
+		2: {
+			// 2, 3개를 포함하는 구간 (대표 키값 2)
+			level: "res_level_1",
+			subTitle: "스크롤 스피드레이서",
+			desc: "스크롤 속도가 상당히 인상적이었어요!\n공지사항이 따라오기 힘들었을지도 모르겠네요.",
 		},
 		0: {
-			level: "res_level_1",
-			title: "0개",
-			subTitle: "스크롤 스피드레이서",
-			desc: "읽긴 읽으셨나요?\n혹시 마우스 휠만 광속으로 돌린 건 아니시죠?\n당신에게 공지사항은 그저 빠르게 스쳐 지나가는 풍경일 뿐...",
+			// 0, 1개를 포함하는 구간 (대표 키값 0)
+			level: null,
+			subTitle: "",
+			desc: "아아.....\n눈은 분명히 움직였는데,\n의미는 끝내 머물지 않았습니다.",
 		},
 	};
 
-	/** 현재 점수에 따른 결과 상수 추출 */
-	const key = correct >= 2 ? 2 : correct >= 1 ? 1 : 0;
+	/** * @description 현재 점수에 따른 결과 키 산출
+	 * 6개, 5개, 4개는 각각 매칭 / 2-3개는 2번 / 0-1개는 0번
+	 */
+	const key = correct >= 6 ? 6 : correct === 5 ? 5 : correct === 4 ? 4 : correct >= 2 ? 2 : 0;
+
 	const currentResult = resultData[key as keyof typeof resultData];
 
 	/* --- [Handlers] 인터랙션 핸들러 --- */
@@ -97,13 +109,17 @@ export default function ResultPage() {
 		<section className="main01">
 			<div className="main01__inner main-common-inner" style={{ textAlign: "center" }}>
 				{/* 결과 비주얼 */}
-				<Image
-					src={`/images/${currentResult.level}.png`}
-					alt={currentResult.subTitle}
-					width={1536}
-					height={1024}
-					priority
-				/>
+				{currentResult.level ? (
+					<Image
+						src={`/images/${currentResult.level}.png`}
+						alt={currentResult.subTitle}
+						width={1536}
+						height={1024}
+						priority
+					/>
+				) : (
+					<div style={{ height: "30px" }} /> // 이미지 없는 등급(0-1점)일 때의 여백
+				)}
 
 				{/* 결과 텍스트 */}
 				<h1>

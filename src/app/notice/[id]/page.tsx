@@ -19,7 +19,7 @@ export default async function NoticePage({
 	const { type } = await searchParams; //(type): 퀴즈의 버전 (예: A안, B안)
 
 	// 1. 유효하지 않은 id나 type인 경우 404 페이지로 보냅니다.
-	if (!["1", "2"].includes(id) || !type || !["a", "b"].includes(type)) {
+	if (!["1", "2"].includes(id) || !type || !["a", "b", "c", "d"].includes(type)) {
 		return notFound();
 	}
 
