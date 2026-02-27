@@ -12,14 +12,12 @@ export default function Home() {
 				</h1>
 				<p>
 					공지사항 읽는 척만 하고 있진 않으신가요? <br />
-					지금 바로 확인해 보세요! <br />
+					지금 바로 확인해 보세요! <br /><br />
 					실제 공지 형식으로 만든 2개의 글, <br />
 					읽고 나면 짧은 퀴즈가 기다리고 있어요.
 				</p>
 
 				<Link href="/notification" className="common-btn">지금 도전하기</Link>
-
-				<p>데모 버전 · 총 2문항</p>
 			</div>
 		</section>
 	);

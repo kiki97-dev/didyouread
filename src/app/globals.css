@@ -116,7 +116,7 @@ html {
 	flex-wrap: wrap;
 	justify-content: center;
 	gap: 10px;
-	row-gap: 15px;
+	row-gap: 10px;
 }
 .footer-list > li {
 	padding-right: 10px;
