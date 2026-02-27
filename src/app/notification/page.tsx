@@ -9,14 +9,24 @@ export default function NotificationPage() {
 	const router = useRouter();
 
 	const handleStart = () => {
-		// 1. 첫 번째 퀴즈인 '1'번으로 고정
-		const quizId = "1";
-		// 2. A, B, C, D안 중 하나를 랜덤 결정
-		const versions = ["a", "b", "c", "d"];
-		const randomIndex = Math.floor(Math.random() * versions.length);
-		const version = versions[randomIndex];
+		// window 객체 존재 확인 (빌드 에러 방지)
+		if (typeof window !== "undefined") {
+			// 1. 사용자 식별 ID(UID) 관리
+			let uid = localStorage.getItem("user_id");
 
-		// 3. 쿼리 파라미터로 전달 (/notice/1?type=a)
+			if (!uid) {
+				// 2. UUID 생성 (지원 안 하는 구형 브라우저 대비 로직 포함 가능)
+				uid = window.crypto?.randomUUID?.() || Math.random().toString(36).substring(2);
+				localStorage.setItem("user_id", uid);
+			}
+
+			console.log("사용자 식별 ID:", uid);
+		}
+
+		const quizId = "1";
+		const versions = ["a", "b", "c", "d"];
+		const version = versions[Math.floor(Math.random() * versions.length)];
+
 		router.push(`/notice/${quizId}?type=${version}`);
 	};
 
