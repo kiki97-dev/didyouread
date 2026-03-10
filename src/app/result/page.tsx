@@ -97,7 +97,7 @@ export default function ResultPage() {
 	// 구글 폼 기본 주소 (뒤에 entry ID를 확인해서 바꿔주세요!)
 	const googleFormBaseUrl =
 		"https://docs.google.com/forms/d/e/1FAIpQLSemKZQ7zBeBJWWiwUqZAJkUth9imjqgRqSd01G3t-EbodVuag/viewform";
-	const entryId = "entry.123456789"; // 1단계에서 확인한 번호로 교체 필수!
+	const entryId = "entry.684648950"; // 1단계에서 확인한 번호로 교체 필수!
 
 	const feedbackLink = `${googleFormBaseUrl}?usp=pp_url&${entryId}=${uid}`;
 
