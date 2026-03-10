@@ -11,7 +11,7 @@ export default function Home() {
 					<span style={{color:'#FE6F43'}}>상위 몇%</span>일까요?
 				</h1>
 				<p>
-					대부분은 '읽었다고 착각'합니다. 
+					대부분은 &lsquo;읽었다고 착각&rsquo;합니다. 
 				</p>
 				<div className="main01__img-wrap">
 				<Image src="/images/main02_02.png" alt="설명 문구" width={142} height={166} />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { FaInstagram, FaLink } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
 import { SiKakaotalk, SiThreads } from "react-icons/si";
 import { FaXTwitter } from "react-icons/fa6";
 
