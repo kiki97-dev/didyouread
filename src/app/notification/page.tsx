@@ -19,12 +19,10 @@ export default function NotificationPage() {
 				uid = window.crypto?.randomUUID?.() || Math.random().toString(36).substring(2);
 				localStorage.setItem("user_id", uid);
 			}
-
-			console.log("사용자 식별 ID:", uid);
 		}
 
 		const quizId = "1";
-		const versions = ["a", "b", "c", "d"];
+		const versions = ["a", "b"];
 		const version = versions[Math.floor(Math.random() * versions.length)];
 
 		router.push(`/notice/${quizId}?type=${version}`);

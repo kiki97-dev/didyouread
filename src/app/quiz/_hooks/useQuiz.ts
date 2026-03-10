@@ -126,10 +126,6 @@ export function useQuiz(): UseQuizReturn {
 
 		// 세션 종료 조건 처리
 		if (id === "1") {
-			const versions = ["a", "b", "c", "d"];
-			const nextVersion = versions[Math.floor(Math.random() * versions.length)];
-			router.push(`/notice/2?type=${nextVersion}`);
-		} else {
 			router.push("/result"); // 최종 결과 페이지로 이동
 		}
 	};

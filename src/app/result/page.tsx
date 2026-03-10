@@ -57,22 +57,17 @@ export default function ResultPage() {
 	const correct = scoreData.correct ?? 0;
 
 	const resultData = {
-		6: {
+		3: {
 			level: "res_level_5", // 이미지 파일명은 프로젝트 상황에 맞게 조정하세요!
 			subTitle: "공지계의 알파고",
 			desc: "혹시 눈이 스캐너인가요?\n복잡한 줄글 속에서도 핵심만 쏙쏙 골라내는\n문해력 상위 1%의 소유자입니다.",
 		},
-		5: {
-			level: "res_level_4",
-			subTitle: "요약본 수집가+",
-			desc: "거의 완벽합니다.\n딱 한 줄만 아쉬웠을 뿐이에요.\n그래도 충분히 멋졌습니다!",
-		},
-		4: {
+		2: {
 			level: "res_level_3",
 			subTitle: "요약본 수집가",
 			desc: "핵심은 잡았지만,\n디테일 하나가 스크롤과 함께 흘러가 버렸네요.",
 		},
-		2: {
+		1: {
 			// 2, 3개를 포함하는 구간 (대표 키값 2)
 			level: "res_level_2",
 			subTitle: "스크롤 스피드레이서",
@@ -86,12 +81,12 @@ export default function ResultPage() {
 		},
 	};
 
-	/** * @description 현재 점수에 따른 결과 키 산출
-	 * 6개, 5개, 4개는 각각 매칭 / 2-3개는 2번 / 0-1개는 0번
-	 */
-	const key = correct >= 6 ? 6 : correct === 5 ? 5 : correct === 4 ? 4 : correct >= 2 ? 2 : 0;
+	/** * @description 현재 점수(0~3)를 그대로 키값으로 사용
+   * 점수가 3보다 크면 3으로, 0보다 작으면 0으로 고정(Clamping)
+   */
+  const key = correct >= 3 ? 3 : correct <= 0 ? 0 : correct;
 
-	const currentResult = resultData[key as keyof typeof resultData];
+  const currentResult = resultData[key as keyof typeof resultData];
 
 	/* --- [Handlers] 인터랙션 핸들러 --- */
 	const handleRetry = () => {
